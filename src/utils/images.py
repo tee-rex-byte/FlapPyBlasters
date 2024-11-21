@@ -7,6 +7,9 @@ from .constants import BACKGROUNDS, PIPES, PLAYERS
 
 
 class Images:
+    ammo_counter: pygame.Surface
+    egg: pygame.Surface
+    egg_cache: pygame.Surface
     numbers: List[pygame.Surface]
     game_over: pygame.Surface
     welcome_message: pygame.Surface
@@ -22,7 +25,16 @@ class Images:
                 for num in range(10)
             )
         )
-
+        # egg bullet
+        self.egg = pygame.image.load("assets/sprites/egg.png").convert_alpha()
+        # egg cache
+        self.egg_cache = pygame.image.load(
+            "assets/sprites/egg-cache.png"
+        ).convert_alpha()
+        # ammo counter
+        self.ammo_counter = pygame.image.load(
+            "assets/sprites/ammo-counter.png"
+        ).convert_alpha()
         # game over sprite
         self.game_over = pygame.image.load(
             "assets/sprites/gameover.png"
