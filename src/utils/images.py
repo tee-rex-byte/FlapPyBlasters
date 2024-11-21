@@ -29,7 +29,7 @@ class Images:
         ).convert_alpha()
         # welcome_message sprite for welcome screen
         self.welcome_message = pygame.image.load(
-            "assets/sprites/message.png"
+            "assets/sprites/blasters-message.png"
         ).convert_alpha()
         # base (ground) sprite
         self.base = pygame.image.load("assets/sprites/base.png").convert_alpha()

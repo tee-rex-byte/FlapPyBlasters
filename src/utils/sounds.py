@@ -4,9 +4,12 @@ import pygame
 
 
 class Sounds:
+    collect: pygame.mixer.Sound
     die: pygame.mixer.Sound
+    explosion: pygame.mixer.Sound
     hit: pygame.mixer.Sound
     point: pygame.mixer.Sound
+    shoot: pygame.mixer.Sound
     swoosh: pygame.mixer.Sound
     wing: pygame.mixer.Sound
 
@@ -16,8 +19,12 @@ class Sounds:
         else:
             ext = "ogg"
 
+        self.collect = pygame.mixer.Sound(f"assets/audio/collect.{ext}")
         self.die = pygame.mixer.Sound(f"assets/audio/die.{ext}")
+        self.explosion = pygame.mixer.Sound(f"assets/audio/explosion.{ext}")
         self.hit = pygame.mixer.Sound(f"assets/audio/hit.{ext}")
         self.point = pygame.mixer.Sound(f"assets/audio/point.{ext}")
+        self.shoot = pygame.mixer.Sound(f"assets/audio/shoot.{ext}")
         self.swoosh = pygame.mixer.Sound(f"assets/audio/swoosh.{ext}")
         self.wing = pygame.mixer.Sound(f"assets/audio/wing.{ext}")
+
