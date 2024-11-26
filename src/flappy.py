@@ -2,7 +2,9 @@ import asyncio
 import sys
 
 import pygame
-from pygame.locals import K_ESCAPE, K_SPACE, K_UP, KEYDOWN, QUIT
+from PIL.ImageChops import screen
+from pygame.examples.testsprite import screen_dims
+from pygame.locals import K_ESCAPE, K_SPACE, K_UP, K_b, KEYDOWN, QUIT
 
 from .entities import (
     Background,
@@ -12,9 +14,11 @@ from .entities import (
     Player,
     PlayerMode,
     Score,
-    WelcomeMessage,
+    WelcomeMessage, player,
 )
-from .utils import GameConfig, Images, Sounds, Window
+from src.utils import GameConfig, Images, Sounds, Window
+from src.entities.blasters import blasters_group
+
 
 
 class Flappy:
@@ -22,17 +26,19 @@ class Flappy:
         pygame.init()
         pygame.display.set_caption("Flappy Bird Blasters")
         window = Window(288, 512)
-        screen = pygame.display.set_mode((window.width, window.height))
+        self.screen = pygame.display.set_mode((window.width, window.height))
         images = Images()
 
         self.config = GameConfig(
-            screen=screen,
+            screen=self.screen,
             clock=pygame.time.Clock(),
             fps=30,
             window=window,
             images=images,
             sounds=Sounds(),
         )
+
+        self.blasters_group = blasters_group
 
     async def start(self):
         while True:
@@ -82,8 +88,12 @@ class Flappy:
         screen_tap = event.type == pygame.FINGERDOWN
         return m_left or space_or_up or screen_tap
 
+    def is_blast_event(self, event):
+        return event.type == KEYDOWN and event.key == K_b
+
     async def play(self):
         self.score.reset()
+        self.blasters_group.empty()
         self.player.set_mode(PlayerMode.NORMAL)
 
         while True:
@@ -98,12 +108,19 @@ class Flappy:
                 self.check_quit_event(event)
                 if self.is_tap_event(event):
                     self.player.flap()
+                if self.is_blast_event(event):
+                    self.player.blast(self.blasters_group)
+
 
             self.background.tick()
             self.floor.tick()
             self.pipes.tick()
             self.score.tick()
             self.player.tick()
+
+            # update and draw groups
+            self.blasters_group.update()
+            self.blasters_group.draw(self.screen)
 
             pygame.display.update()
             await asyncio.sleep(0)

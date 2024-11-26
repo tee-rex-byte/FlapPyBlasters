@@ -7,6 +7,7 @@ from ..utils import GameConfig, clamp
 from .entity import Entity
 from .floor import Floor
 from .pipe import Pipe, Pipes
+from .blasters import Blasters, blasters_group
 
 
 class PlayerMode(Enum):
@@ -165,3 +166,8 @@ class Player(Entity):
                 return True
 
         return False
+
+    def blast(self, blaster_group):
+        blaster = Blasters(self.x, self.y, self.config)
+        blasters_group.add(blaster)
+
