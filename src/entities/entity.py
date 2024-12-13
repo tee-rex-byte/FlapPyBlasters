@@ -5,7 +5,7 @@ import pygame
 from ..utils import GameConfig, get_hit_mask, pixel_collision
 
 
-class Entity:
+class Entity(pygame.sprite.Sprite):
     def __init__(
         self,
         config: GameConfig,
@@ -16,6 +16,7 @@ class Entity:
         h: int = None,
         **kwargs,
     ) -> None:
+        pygame.sprite.Sprite.__init__(self),
         self.config = config
         self.x = x
         self.y = y

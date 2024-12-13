@@ -1,29 +1,25 @@
 import pygame
 
-from ..utils import GameConfig, clamp
+from ..utils import GameConfig
 from .entity import Entity
-from .floor import Floor
-from .pipe import Pipe, Pipes
 
-blasters_group = pygame.sprite.Group()
 
-class Blasters(pygame.sprite.Sprite):
+class Blasters(Entity):
     def __init__(self, x, y, config: GameConfig):
-        self.group = blasters_group
-        pygame.sprite.Sprite.__init__(self, blasters_group)
-        self.config = config
-        self.speed = 12
-        image = config.images.egg
-        self.image = pygame.transform.scale(image, (50, 50))
-        self.rect = self.image.get_rect()
-        self.rect.center = (x, y)
+        image = pygame.transform.scale(config.images.egg, (50, 50))
+        super().__init__(config, image, x, y)
+        self.hit = False
+        self.crashed = False
+        self.speed = 7
         self.config.sounds.shoot.play()
 
     def update(self):
-        self.rect.x += self.speed
+        """Updates sprite image and deletes it if it goes off-screen"""
+        self.x += self.speed
+        self.rect.x = self.x
         if self.rect.right > self.config.window.width:
             self.kill()
 
-    #draws egg sprite
-    def draw(self, screen):
-        screen.blit(self.image, self.rect.topleft)
+    def draw(self):
+        """Draws egg sprite on screen"""
+        super().draw()

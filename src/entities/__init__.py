@@ -9,6 +9,7 @@ from .score import Score
 from .welcome_message import WelcomeMessage
 
 __all__ = [
+    "AmmoCache",
     "Background",
     "Blasters",
     "Floor",

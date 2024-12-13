@@ -1,8 +1,10 @@
 import random
+import pygame.time
 from typing import List
 
 from ..utils import GameConfig
 from .entity import Entity
+from .groups import blasters_group
 
 
 class Pipe(Entity):
@@ -21,6 +23,8 @@ class Pipes(Entity):
 
     def __init__(self, config: GameConfig) -> None:
         super().__init__(config)
+        self.last_explosion_time = 0
+        self.explosion_cooldown = 500
         self.pipe_gap = 120
         self.top = 0
         self.bottom = self.config.window.viewport_height
@@ -31,38 +35,59 @@ class Pipes(Entity):
     def tick(self) -> None:
         if self.can_spawn_pipes():
             self.spawn_new_pipes()
+
         self.remove_old_pipes()
+
+        pipes_to_remove = []
+        current_time = pygame.time.get_ticks()
 
         for up_pipe, low_pipe in zip(self.upper, self.lower):
             up_pipe.tick()
             low_pipe.tick()
+
+            # Handles pipe and blaster collision
+            for blaster in blasters_group.sprites():
+                if up_pipe.collide(blaster) or low_pipe.collide(blaster):
+                    if current_time - self.last_explosion_time >= self.explosion_cooldown:
+                        self.last_explosion_time = current_time
+                        self.config.sounds.explosion.play()
+                        pipes_to_remove.append((up_pipe, low_pipe))
+
+                        # Remove Blaster
+                        blasters_group.remove(blaster)
+
+        # Remove Pipes AFTER iteration
+        self.upper = [pipe for pipe in self.upper if (pipe not in [p[0] for p in pipes_to_remove])]
+        self.lower = [pipe for pipe in self.lower if (pipe not in [p[1] for p in pipes_to_remove])]
 
     def stop(self) -> None:
         for pipe in self.upper + self.lower:
             pipe.vel_x = 0
 
     def can_spawn_pipes(self) -> bool:
-        last = self.upper[-1]
-        if not last:
+        if not self.upper:
             return True
+        last = self.upper[-1]
 
         return self.config.window.width - (last.x + last.w) > last.w * 2.5
 
     def spawn_new_pipes(self):
         # add new pipe when first pipe is about to touch left of screen
-        upper, lower = self.make_random_pipes()
-        self.upper.append(upper)
-        self.lower.append(lower)
+        if not self.upper or self.can_spawn_pipes():
+            upper, lower = self.make_random_pipes()
+            if self.upper:
+                last_upper_pipe = self.upper[-1]
+                if upper.x - last_upper_pipe.x < last_upper_pipe.w * 3.5:
+                    # Adjust spawn difference
+                    upper.x = last_upper_pipe.x + last_upper_pipe.w * 3.5
+                    lower.x = last_upper_pipe.x + last_upper_pipe.w * 3.5
+            self.upper.append(upper)
+            self.lower.append(lower)
 
     def remove_old_pipes(self):
-        # remove first pipe if its out of the screen
-        for pipe in self.upper:
-            if pipe.x < -pipe.w:
-                self.upper.remove(pipe)
-
-        for pipe in self.lower:
-            if pipe.x < -pipe.w:
-                self.lower.remove(pipe)
+        # remove first pipe if it's out of the screen
+        self.upper = [pipe for pipe in self.upper if pipe.x >= -pipe.w]
+        self.lower = [pipe for pipe in self.lower if pipe.x >= -pipe.w]
 
     def spawn_initial_pipes(self):
         upper_1, lower_1 = self.make_random_pipes()
@@ -102,3 +127,4 @@ class Pipes(Entity):
         )
 
         return upper_pipe, lower_pipe
+

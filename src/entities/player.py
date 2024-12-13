@@ -7,7 +7,8 @@ from ..utils import GameConfig, clamp
 from .entity import Entity
 from .floor import Floor
 from .pipe import Pipe, Pipes
-from .blasters import Blasters, blasters_group
+from .blasters import Blasters
+from .groups import blasters_group
 
 
 class PlayerMode(Enum):
@@ -27,6 +28,7 @@ class Player(Entity):
         self.img_idx = 0
         self.img_gen = cycle([0, 1, 2, 1])
         self.frame = 0
+        self.ammo = 5
         self.crashed = False
         self.crash_entity = None
         self.set_mode(PlayerMode.SHM)
@@ -167,7 +169,11 @@ class Player(Entity):
 
         return False
 
-    def blast(self, blaster_group):
-        blaster = Blasters(self.x, self.y, self.config)
-        blasters_group.add(blaster)
-
+    def blast(self):
+        """Fires a blaster if ammo available."""
+        if self.ammo > 0:
+            blaster = Blasters(self.x, self.y, self.config)
+            blasters_group.add(blaster)
+            self.ammo -= 1
+        else:
+            None

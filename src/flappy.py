@@ -17,7 +17,7 @@ from .entities import (
     WelcomeMessage, player,
 )
 from src.utils import GameConfig, Images, Sounds, Window
-from src.entities.blasters import blasters_group
+from src.entities.groups import blasters_group
 
 
 
@@ -109,7 +109,7 @@ class Flappy:
                 if self.is_tap_event(event):
                     self.player.flap()
                 if self.is_blast_event(event):
-                    self.player.blast(self.blasters_group)
+                    self.player.blast()
 
 
             self.background.tick()
