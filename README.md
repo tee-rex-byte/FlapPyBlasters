@@ -9,7 +9,7 @@ A reimagined Flappy Bird clone where you can flap, navigate through pipes, and d
 [pygame]: http://www.pygame.org
 
 
-Setup (as tested on Windows 64)
+Setup (Windows 64)
 ---------------------------
 
 1. Install Python 3 from [here](https://www.python.org/download/releases/) (or use brew/apt/pyenv)
@@ -19,11 +19,20 @@ Setup (as tested on Windows 64)
 $ git clone [https://github.com/sourabhv/FlapPyBird](https://github.com/tee-rex-byte/FlapPyBlasters.git)
 ```
 
-4. Open a terminal, navigate to your project directory, and execute: `makefile.bat init`
+4. Open powershell, navigate to your project directory, and execute: `pip install pygame`
 
-5. Run `makefile.bat run` to run the game.
+5. Activate Virtual Enviroment `venv\Scripts\Activate.ps1`
 
-7. Use <kbd>&uarr;</kbd> or <kbd>Space</kbd> key to play, <kbd>B</kbd> to shoot, and <kbd>Esc</kbd> to close the game.
+6. Update and install
+   - `pip install -U pip`
+   - `pip install -e ".[dev]"`
+   - `pip install pre-commit`
+
+7. Initialize Pre-commit: `pre-commit install`
+
+8. Run `python main.py` to run the game.
+
+9. Use <kbd>&uarr;</kbd> or <kbd>Space</kbd> key to play, <kbd>B</kbd> to shoot, and <kbd>Esc</kbd> to close the game.
 
 
 Notable forks
@@ -40,4 +49,8 @@ Made something awesome from FlapPyBird? Add it to the list :)
 Demo
 ----------
 
-https://user-images.githubusercontent.com/2307626/130682424-9254b32d-efe0-406e-a6ea-3fb625a2df5e.mp4
+
+
+https://github.com/user-attachments/assets/4f9ab739-c5bf-46f6-a2bb-2e15015131c3
+
+
