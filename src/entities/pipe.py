@@ -5,6 +5,7 @@ from typing import List
 from ..utils import GameConfig
 from .entity import Entity
 from .groups import blasters_group
+from .score import Score
 
 
 class Pipe(Entity):
@@ -21,8 +22,9 @@ class Pipes(Entity):
     upper: List[Pipe]
     lower: List[Pipe]
 
-    def __init__(self, config: GameConfig) -> None:
+    def __init__(self, config: GameConfig, score: Score) -> None:
         super().__init__(config)
+        self.score = score
         self.last_explosion_time = 0
         self.explosion_cooldown = 500
         self.pipe_gap = 120
@@ -55,6 +57,9 @@ class Pipes(Entity):
 
                         # Remove Blaster
                         blasters_group.remove(blaster)
+
+                        #Increment Score
+                        self.score.add()
 
         # Remove Pipes AFTER iteration
         self.upper = [pipe for pipe in self.upper if (pipe not in [p[0] for p in pipes_to_remove])]

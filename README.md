@@ -1,22 +1,22 @@
-[FlapPyBird](https://sourabhv.github.io/FlapPyBird)
+[FlapPyBlasters](https://github.com/tee-rex-byte/FlapPyBlasters)
 ===============
 
-A Flappy Bird Clone made using [python-pygame][pygame]
+A reimagined Flappy Bird clone where you can flap, navigate through pipes, and destroy obstacles using blasters!
 
-> If you are in interested in the old one-file code for the game, you can [find it here][one-file-game]
-
-[pygame]: http://www.pygame.org
-[one-file-game]: https://github.com/sourabhv/FlapPyBird/blob/038359dc6122f8d851e816ddb3e7d28229d585e5/flappy.py
+> Made from a Flappy Bird Clone - [FlapPyBird](https://github.com/sourabhv/FlapPyBird) made using [python-pygame]
 
 
-Setup (as tested on MacOS)
+
+
+
+Setup (as tested Windows x64)
 ---------------------------
 
 1. Install Python 3 from [here](https://www.python.org/download/releases/) (or use brew/apt/pyenv)
 
 2. Run `make init` (this will install pip packages, use virtualenv or something similar if you don't want to install globally)
 
-3. Run `make` to run the game. Run `DEBUG=True make` to see rects and coords
+3. Run `make` to run the game. Run `DEBUG=True make` to see rects and cords
 
 4. Use <kbd>&uarr;</kbd> or <kbd>Space</kbd> key to play and <kbd>Esc</kbd> to close the game.
 

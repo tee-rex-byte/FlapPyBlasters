@@ -2,8 +2,6 @@ import asyncio
 import sys
 
 import pygame
-from PIL.ImageChops import screen
-from pygame.examples.testsprite import screen_dims
 from pygame.locals import K_ESCAPE, K_SPACE, K_UP, K_b, KEYDOWN, QUIT
 
 from .entities import (
@@ -14,10 +12,11 @@ from .entities import (
     Player,
     PlayerMode,
     Score,
-    WelcomeMessage, player,
+    WelcomeMessage,
 )
 from src.utils import GameConfig, Images, Sounds, Window
-from src.entities.groups import blasters_group
+from src.entities.groups import blasters_group, ammo_cache_group
+from src.entities.ammo_cache import AmmoCache
 
 
 
@@ -39,6 +38,7 @@ class Flappy:
         )
 
         self.blasters_group = blasters_group
+        self.ammo_cache_group = ammo_cache_group
 
     async def start(self):
         while True:
@@ -47,8 +47,8 @@ class Flappy:
             self.player = Player(self.config)
             self.welcome_message = WelcomeMessage(self.config)
             self.game_over_message = GameOver(self.config)
-            self.pipes = Pipes(self.config)
             self.score = Score(self.config)
+            self.pipes = Pipes(self.config, self.score)
             await self.splash()
             await self.play()
             await self.game_over()
@@ -68,6 +68,9 @@ class Flappy:
             self.floor.tick()
             self.player.tick()
             self.welcome_message.tick()
+
+            # update and draw groups
+            self.update_draw_groups()
 
             pygame.display.update()
             await asyncio.sleep(0)
@@ -91,18 +94,36 @@ class Flappy:
     def is_blast_event(self, event):
         return event.type == KEYDOWN and event.key == K_b
 
+    def update_draw_groups(self):
+        self.blasters_group.update()
+        self.blasters_group.draw(self.screen)
+        self.ammo_cache_group.update()
+        self.ammo_cache_group.draw(self.screen)
+
     async def play(self):
+        self.player.ammo = 3
         self.score.reset()
         self.blasters_group.empty()
+        self.ammo_cache_group.empty()
         self.player.set_mode(PlayerMode.NORMAL)
+
+        ammo_cache = AmmoCache(self.config, self.player)
 
         while True:
             if self.player.collided(self.pipes, self.floor):
                 return
 
+            # Spawn Ammo if you can
+            ammo_cache.maybe_spawn_ammo(self.ammo_cache_group)
+
+            for cache in self.ammo_cache_group:
+                cache.check_collision()
+
+
             for i, pipe in enumerate(self.pipes.upper):
                 if self.player.crossed(pipe):
                     self.score.add()
+
 
             for event in pygame.event.get():
                 self.check_quit_event(event)
@@ -119,8 +140,7 @@ class Flappy:
             self.player.tick()
 
             # update and draw groups
-            self.blasters_group.update()
-            self.blasters_group.draw(self.screen)
+            self.update_draw_groups()
 
             pygame.display.update()
             await asyncio.sleep(0)
@@ -145,6 +165,9 @@ class Flappy:
             self.pipes.tick()
             self.score.tick()
             self.player.tick()
+            self.blasters_group.empty()
+            self.ammo_cache_group.empty()
+
             self.game_over_message.tick()
 
             self.config.tick()

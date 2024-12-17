@@ -19,10 +19,12 @@ class PlayerMode(Enum):
 
 class Player(Entity):
     def __init__(self, config: GameConfig) -> None:
-        image = config.images.player[0]
-        x = int(config.window.width * 0.2)
-        y = int((config.window.height - image.get_height()) / 2)
-        super().__init__(config, image, x, y)
+        super().__init__(
+            config,
+            image=config.images.player[0],
+            x=int(config.window.width * 0.2),
+            y=int((config.window.height - config.images.player[0].get_height()) / 2),
+        )
         self.min_y = -2 * self.h
         self.max_y = config.window.viewport_height - self.h * 0.75
         self.img_idx = 0
@@ -176,4 +178,4 @@ class Player(Entity):
             blasters_group.add(blaster)
             self.ammo -= 1
         else:
-            None
+            self.config.sounds.empty.play()
