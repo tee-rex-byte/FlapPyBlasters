@@ -19,20 +19,20 @@ Setup (Windows 64)
 $ git clone [https://github.com/sourabhv/FlapPyBird](https://github.com/tee-rex-byte/FlapPyBlasters.git)
 ```
 
-3. Open powershell, navigate to your project directory, and execute: `pip install pygame`
+4. Open powershell, navigate to your project directory, and execute: `pip install pygame`
 
-4. Activate Virtual Enviroment `venv\Scripts\Activate.ps1`
+5. Activate Virtual Enviroment `venv\Scripts\Activate.ps1`
 
-5. Update and install
+6. Update and install
    - `pip install -U pip`
    - `pip install -e ".[dev]"`
    - `pip install pre-commit`
 
-6. Initialize Pre-commit: `pre-commit install`
+7. Initialize Pre-commit: `pre-commit install`
 
-7. Run `python main.py` to run the game.
+8. Run `python main.py` to run the game.
 
-8. Use <kbd>&uarr;</kbd> or <kbd>Space</kbd> key to play, <kbd>B</kbd> to shoot, and <kbd>Esc</kbd> to close the game.
+9. Use <kbd>&uarr;</kbd> or <kbd>Space</kbd> key to play, <kbd>B</kbd> to shoot, and <kbd>Esc</kbd> to close the game.
 
 
 Notable forks
@@ -52,3 +52,9 @@ Demo
 
 
 https://github.com/user-attachments/assets/53e2072e-75fe-4543-8f64-dfa6683b9048
+
+
+
+
+
+
