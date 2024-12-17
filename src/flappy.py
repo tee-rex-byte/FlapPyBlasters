@@ -101,7 +101,7 @@ class Flappy:
         self.ammo_cache_group.draw(self.screen)
 
     async def play(self):
-        self.player.ammo = 3
+        self.player.ammo = 5
         self.score.reset()
         self.blasters_group.empty()
         self.ammo_cache_group.empty()
