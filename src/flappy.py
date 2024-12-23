@@ -19,7 +19,6 @@ from src.entities.groups import blasters_group, ammo_cache_group
 from src.entities.ammo_cache import AmmoCache
 
 
-
 class Flappy:
     def __init__(self):
         pygame.init()
@@ -119,11 +118,9 @@ class Flappy:
             for cache in self.ammo_cache_group:
                 cache.check_collision()
 
-
             for i, pipe in enumerate(self.pipes.upper):
                 if self.player.crossed(pipe):
                     self.score.add()
-
 
             for event in pygame.event.get():
                 self.check_quit_event(event)
@@ -131,7 +128,6 @@ class Flappy:
                     self.player.flap()
                 if self.is_blast_event(event):
                     self.player.blast()
-
 
             self.background.tick()
             self.floor.tick()

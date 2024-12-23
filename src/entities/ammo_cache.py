@@ -5,6 +5,7 @@ from ..utils import GameConfig
 from .entity import Entity
 from .groups import ammo_cache_group
 
+
 class AmmoCache(Entity):
     def __init__(self, config: GameConfig, player) -> None:
         # Initialize the parent class
@@ -12,7 +13,8 @@ class AmmoCache(Entity):
             config,
             image=config.images.egg_cache.convert_alpha(),
             x=config.window.width,  # Start off-screen on the right
-            y=(config.window.height - config.images.egg_cache.get_height()) // 2,  # Center vertically
+            y=(config.window.height - config.images.egg_cache.get_height())
+            // 2,  # Center vertically
         )
         self.player = player
         self.last_ammo_time = 0

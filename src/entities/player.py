@@ -23,7 +23,10 @@ class Player(Entity):
             config,
             image=config.images.player[0],
             x=int(config.window.width * 0.2),
-            y=int((config.window.height - config.images.player[0].get_height()) / 2),
+            y=int(
+                (config.window.height - config.images.player[0].get_height())
+                / 2
+            ),
         )
         self.min_y = -2 * self.h
         self.max_y = config.window.viewport_height - self.h * 0.75

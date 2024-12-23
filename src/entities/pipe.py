@@ -50,7 +50,10 @@ class Pipes(Entity):
             # Handles pipe and blaster collision
             for blaster in blasters_group.sprites():
                 if up_pipe.collide(blaster) or low_pipe.collide(blaster):
-                    if current_time - self.last_explosion_time >= self.explosion_cooldown:
+                    if (
+                        current_time - self.last_explosion_time
+                        >= self.explosion_cooldown
+                    ):
                         self.last_explosion_time = current_time
                         self.config.sounds.explosion.play()
                         pipes_to_remove.append((up_pipe, low_pipe))
@@ -58,12 +61,20 @@ class Pipes(Entity):
                         # Remove Blaster
                         blasters_group.remove(blaster)
 
-                        #Increment Score
+                        # Increment Score
                         self.score.add()
 
         # Remove Pipes AFTER iteration
-        self.upper = [pipe for pipe in self.upper if (pipe not in [p[0] for p in pipes_to_remove])]
-        self.lower = [pipe for pipe in self.lower if (pipe not in [p[1] for p in pipes_to_remove])]
+        self.upper = [
+            pipe
+            for pipe in self.upper
+            if (pipe not in [p[0] for p in pipes_to_remove])
+        ]
+        self.lower = [
+            pipe
+            for pipe in self.lower
+            if (pipe not in [p[1] for p in pipes_to_remove])
+        ]
 
     def stop(self) -> None:
         for pipe in self.upper + self.lower:
@@ -132,4 +143,3 @@ class Pipes(Entity):
         )
 
         return upper_pipe, lower_pipe
-
