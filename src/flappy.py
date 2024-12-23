@@ -97,7 +97,7 @@ class Flappy:
                 return
 
             # Spawn Ammo if you can
-            ammo_cache.maybe_spawn_ammo(self.ammo_cache_group)
+            ammo_cache.maybe_spawn_ammo()
 
             for cache in self.ammo_cache_group:
                 cache.check_collision()

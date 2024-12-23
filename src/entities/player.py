@@ -86,7 +86,7 @@ class Player(Entity):
         self.max_vel_y = 15
         self.vel_rot = -8
 
-    def update_image(self):
+    def update_image(self, **kwargs):
         self.frame += 1
         if self.frame % 5 == 0:
             self.img_idx = next(self.img_gen)

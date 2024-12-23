@@ -21,7 +21,7 @@ class AmmoCache(Entity):
         self.ammo_spawn_interval = 3000
         self.speed = 5
 
-    def maybe_spawn_ammo(self, ammo_caches_group):
+    def maybe_spawn_ammo(self):
         """Spawns ammo if the player has less than 5 ammo and the cooldown has passed."""
 
         current_time = pygame.time.get_ticks()
