@@ -1,8 +1,7 @@
 import asyncio
-import sys
 
 import pygame
-from pygame.locals import K_ESCAPE, K_SPACE, K_UP, K_b, KEYDOWN, QUIT
+
 
 from .entities import (
     Background,
@@ -17,6 +16,7 @@ from .entities import (
 from src.utils import GameConfig, Images, Sounds, Window
 from src.entities.groups import blasters_group, ammo_cache_group
 from src.entities.ammo_cache import AmmoCache
+from src.entities.event_handler import EventHandler
 
 
 class Flappy:
@@ -36,17 +36,19 @@ class Flappy:
             sounds=Sounds(),
         )
 
+        self.background = Background(self.config)
+        self.floor = Floor(self.config)
+        self.player = Player(self.config)
+        self.welcome_message = WelcomeMessage(self.config)
+        self.game_over_message = GameOver(self.config)
+        self.score = Score(self.config)
+        self.pipes = Pipes(self.config, self.score)
         self.blasters_group = blasters_group
         self.ammo_cache_group = ammo_cache_group
 
     async def start(self):
         while True:
-            self.background = Background(self.config)
-            self.floor = Floor(self.config)
             self.player = Player(self.config)
-            self.welcome_message = WelcomeMessage(self.config)
-            self.game_over_message = GameOver(self.config)
-            self.score = Score(self.config)
             self.pipes = Pipes(self.config, self.score)
             await self.splash()
             await self.play()
@@ -59,8 +61,8 @@ class Flappy:
 
         while True:
             for event in pygame.event.get():
-                self.check_quit_event(event)
-                if self.is_tap_event(event):
+                EventHandler.check_quit_event(event)
+                if EventHandler.is_tap_event(event):
                     return
 
             self.background.tick()
@@ -74,24 +76,6 @@ class Flappy:
             pygame.display.update()
             await asyncio.sleep(0)
             self.config.tick()
-
-    def check_quit_event(self, event):
-        if event.type == QUIT or (
-            event.type == KEYDOWN and event.key == K_ESCAPE
-        ):
-            pygame.quit()
-            sys.exit()
-
-    def is_tap_event(self, event):
-        m_left, _, _ = pygame.mouse.get_pressed()
-        space_or_up = event.type == KEYDOWN and (
-            event.key == K_SPACE or event.key == K_UP
-        )
-        screen_tap = event.type == pygame.FINGERDOWN
-        return m_left or space_or_up or screen_tap
-
-    def is_blast_event(self, event):
-        return event.type == KEYDOWN and event.key == K_b
 
     def update_draw_groups(self):
         self.blasters_group.update()
@@ -123,10 +107,10 @@ class Flappy:
                     self.score.add()
 
             for event in pygame.event.get():
-                self.check_quit_event(event)
-                if self.is_tap_event(event):
+                EventHandler.check_quit_event(event)
+                if EventHandler.is_tap_event(event):
                     self.player.flap()
-                if self.is_blast_event(event):
+                if EventHandler.is_blast_event(event):
                     self.player.blast()
 
             self.background.tick()
@@ -143,7 +127,7 @@ class Flappy:
             self.config.tick()
 
     async def game_over(self):
-        """crashes the player down and shows gameover image"""
+        """crashes the player down and shows game over image"""
 
         self.player.set_mode(PlayerMode.CRASH)
         self.pipes.stop()
@@ -151,8 +135,8 @@ class Flappy:
 
         while True:
             for event in pygame.event.get():
-                self.check_quit_event(event)
-                if self.is_tap_event(event):
+                EventHandler.check_quit_event(event)
+                if EventHandler.is_tap_event(event):
                     if self.player.y + self.player.h >= self.floor.y - 1:
                         return
 
